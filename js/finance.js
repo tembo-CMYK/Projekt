@@ -71,7 +71,7 @@ export const FinanceView = {
         </div>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+      <div class="finance-lists-grid">
         <!-- Invoices List -->
         <div class="detail-card">
           <div class="detail-card-title">
@@ -198,7 +198,7 @@ export const FinanceView = {
         </div>
 
         <!-- Body Grid -->
-        <div class="new-invoice-body-grid" style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: start; transition: all 0.3s ease;">
+        <div class="new-invoice-body-grid">
           <!-- Left Column: Form -->
           <div style="display: flex; flex-direction: column; gap: 24px;">
             

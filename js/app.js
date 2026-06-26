@@ -565,22 +565,24 @@ const App = {
   updateProfileUI() {
     const profile = AppDB.getProfile();
     
-    const avatar = document.querySelector('.profile-avatar');
+    const avatars = document.querySelectorAll('.profile-avatar');
     const nameSpan = document.querySelector('.profile-name');
     const roleSpan = document.querySelector('.profile-role');
     
-    if (avatar) avatar.src = profile.avatar;
+    avatars.forEach(av => {
+      av.src = profile.avatar;
+    });
     if (nameSpan) nameSpan.innerText = profile.name;
     if (roleSpan) roleSpan.innerText = profile.role;
   },
 
   bindProfileCard() {
-    const profileCard = document.querySelector('.profile-card');
-    if (profileCard) {
-      profileCard.addEventListener('click', () => {
+    const profileTriggers = document.querySelectorAll('.profile-card, .mobile-profile-trigger');
+    profileTriggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
         this.showProfileModal();
       });
-    }
+    });
   },
 
   showProfileModal() {

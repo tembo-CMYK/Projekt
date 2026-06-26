@@ -105,7 +105,8 @@ input, select, textarea {
 .app-container {
   display: flex;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
+  max-width: 100%;
   overflow: hidden;
   position: relative;
   z-index: 1; /* Ensure it sits above cosmic canvas (z-index: 0) */
@@ -2374,7 +2375,18 @@ select option {
 }
 
 /* Invoice Redesign & Reference Layout Adjustments */
+.finance-lists-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
 .new-invoice-body-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 32px;
+  align-items: start;
+  transition: all 0.3s ease;
   animation: fadeIn 0.2s ease-out;
 }
 
@@ -2867,9 +2879,9 @@ select option {
   .doc-title,
   .link-title,
   .prompt-title {
-    font-size: 16px !important;
+    font-size: 18px !important;            /* Increased to 18px */
     line-height: 1.4 !important;
-    font-weight: 500 !important;
+    font-weight: 600 !important;            /* Emphasized weight */
   }
 
   /* Secondary meta text — kept smaller but still legible (≥12px) */
@@ -2880,9 +2892,39 @@ select option {
   .client-card-meta,
   .project-card-meta-row,
   .phase-status-label {
-    font-size: 12px !important;
+    font-size: 13px !important;            /* Increased to 13px */
     line-height: 1.4 !important;
     font-weight: 400 !important;           /* Rule 3: boost weight */
+  }
+
+  /* Dashboard Project & Asset list overrides for inline font-sizes */
+  .dash-proj-item strong,
+  .dash-asset-item strong {
+    font-size: 16px !important;
+  }
+  
+  .dash-proj-item div,
+  .dash-asset-item span {
+    font-size: 13px !important;
+  }
+
+  /* Upcoming deadlines & schedule overrides */
+  .detail-sidebar .detail-card div[style*="display: flex; gap: 16px;"] strong {
+    font-size: 16px !important;
+  }
+
+  .detail-sidebar .detail-card div[style*="display: flex; gap: 16px;"] span {
+    font-size: 13px !important;
+  }
+
+  /* Asset Library view text overrides */
+  .asset-section h3 {
+    font-size: 16px !important;
+  }
+
+  .asset-section div[style*="font-family: monospace;"],
+  .asset-section div[style*="font-size: 11px;"] {
+    font-size: 13px !important;
   }
 
   /* Section headings — weight-based hierarchy (Rule 2: avoid massive text) */
@@ -2921,10 +2963,16 @@ select option {
   }
 
   .header-actions {
+    display: flex !important;
+    align-items: center !important;
     justify-content: space-between !important;
     width: 100% !important;
     flex-wrap: wrap !important;
     gap: 8px !important;                    /* Rule 1: ≥8dp between elements */
+  }
+
+  .mobile-profile-trigger {
+    display: flex !important;
   }
 
   #header-clock {
@@ -2932,7 +2980,7 @@ select option {
   }
 
   .header-actions > div[style*="width: 180px"] {
-    width: 140px !important;
+    width: 165px !important;
   }
 
   /* ╔══════════════════════════════════════════╗
@@ -3022,6 +3070,11 @@ select option {
 
   .new-invoice-body-grid {
     grid-template-columns: 1fr !important;
+  }
+
+  .finance-lists-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
   }
 
   /* ╔══════════════════════════════════════════╗
