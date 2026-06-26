@@ -2665,6 +2665,10 @@ select option {
     grid-template-columns: 1fr;
     gap: 24px;
   }
+  .finance-lists-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
 }
 
 /* ==========================================================================
