@@ -2653,31 +2653,39 @@ select option {
 
 /* Mobile View Adjustments (widths under 768px) */
 @media (max-width: 768px) {
+
+  /* ── Layout Shell ── */
   .app-container {
     flex-direction: column !important;
-    height: auto !important;
+    height: 100vh !important;
     min-height: 100vh !important;
-    overflow-y: auto !important;
+    min-height: 100dvh !important;          /* dynamic viewport on iOS */
+    overflow: hidden !important;
   }
 
+  /* ── Bottom Navigation Bar ── */
   .sidebar {
     position: fixed !important;
     bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
+    top: auto !important;
     width: 100% !important;
-    height: 60px !important;
+    height: 56px !important;
     flex-direction: row !important;
     justify-content: space-around !important;
     align-items: center !important;
-    padding: 0 10px !important;
+    padding: 0 !important;
     border-right: none !important;
-    border-top: 1px solid var(--border-color) !important;
-    background-color: var(--bg-sidebar) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background-color: rgba(18, 18, 22, 0.92) !important;
+    backdrop-filter: blur(20px) saturate(1.6) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(1.6) !important;
     z-index: 1000 !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;  /* iPhone notch */
   }
 
-  /* Hide elements inside sidebar that aren't navigation links */
+  /* Hide non-navigation sidebar elements */
   .sidebar .logo-container,
   .sidebar .profile-card,
   .sidebar .nav-label,
@@ -2691,63 +2699,278 @@ select option {
     justify-content: space-around !important;
     align-items: center !important;
     width: 100% !important;
+    height: 100% !important;
     margin: 0 !important;
     gap: 0 !important;
   }
 
+  /* ── Nav Items: ICONS ONLY ── */
   .sidebar-nav .nav-item {
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 4px !important;
-    padding: 6px 0 !important;
-    font-size: 8px !important;
-    border-radius: var(--radius-sm) !important;
+    gap: 0 !important;
+    padding: 8px 0 !important;
+    font-size: 0 !important;                /* hide all text */
+    border-radius: 0 !important;
     background: transparent !important;
     border: none !important;
     width: 20% !important;
+    min-height: 44px !important;            /* touch-target minimum */
     color: var(--text-muted) !important;
-    text-transform: uppercase !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.5px !important;
+    position: relative !important;
   }
 
   .sidebar-nav .nav-item svg {
-    width: 20px !important;
-    height: 20px !important;
+    width: 22px !important;
+    height: 22px !important;
     margin-right: 0 !important;
+    flex-shrink: 0 !important;
   }
 
+  /* Active state: colored icon + top accent dot */
   .sidebar-nav .nav-item.active {
     color: var(--color-primary) !important;
     box-shadow: none !important;
+    background: transparent !important;
   }
 
-  /* Offset the main content area so bottom navigation doesn't cover it */
+  .sidebar-nav .nav-item.active svg {
+    stroke: var(--color-primary) !important;
+  }
+
+  /* Hide the desktop left-edge accent bar on mobile */
+  .sidebar-nav .nav-item.active::before {
+    left: 50% !important;
+    top: 0 !important;
+    bottom: auto !important;
+    width: 20px !important;
+    height: 2px !important;
+    transform: translateX(-50%) !important;
+    border-radius: 0 0 2px 2px !important;
+  }
+
+  /* ── Main Content Offset ── */
   .workspace-container {
-    margin-bottom: 60px !important;
-    height: calc(100vh - 60px) !important;
+    margin-bottom: 56px !important;
+    height: calc(100vh - 56px) !important;
+    height: calc(100dvh - 56px) !important;
   }
 
   .workspace-content {
-    padding: 16px !important;
+    padding: 14px !important;
+    padding-bottom: 24px !important;
   }
 
+  /* ── Header ── */
   .workspace-header {
     height: auto !important;
     flex-direction: column !important;
-    padding: 14px 16px !important;
-    gap: 12px !important;
+    padding: 10px 14px !important;
+    gap: 10px !important;
     align-items: stretch !important;
   }
-  
+
   .header-search {
     max-width: 100% !important;
+    width: 100% !important;
   }
-  
+
+  .header-search input {
+    font-size: 14px !important;            /* prevent iOS zoom on focus */
+  }
+
   .header-actions {
     justify-content: space-between !important;
     width: 100% !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  #header-clock {
+    font-size: 12px !important;
+  }
+
+  .header-actions > div[style*="width: 180px"] {
+    width: 140px !important;
+  }
+
+  /* ── Grids: Stack on mobile ── */
+  .projects-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .client-list-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .assets-library-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .dashboard-stats {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+
+  .dashboard-main-layout {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .top-brief-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .project-detail-layout {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .client-detail-layout {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .new-invoice-body-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Section Header ── */
+  .section-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  .section-title h1 {
+    font-size: 20px !important;
+  }
+
+  /* ── Tab Filters: scrollable row ── */
+  .tab-filters {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex-wrap: nowrap !important;
+    gap: 2px !important;
+    scrollbar-width: none !important;
+  }
+
+  .tab-filters::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .filter-tab {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+  }
+
+  .category-filters {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none !important;
+    gap: 6px !important;
+    padding-bottom: 4px !important;
+  }
+
+  .category-filters::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .category-tab {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* ── Stat Cards ── */
+  .stat-card {
+    padding: 12px !important;
+  }
+
+  .stat-value {
+    font-size: 18px !important;
+  }
+
+  .stat-card-badge {
+    width: 28px !important;
+    height: 28px !important;
+    top: 10px !important;
+    right: 10px !important;
+    font-size: 16px !important;
+  }
+
+  /* ── Kanban Board ── */
+  .kanban-board-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  /* ── Modals: full-width on mobile ── */
+  .modal-container {
+    width: 95% !important;
+    max-width: none !important;
+    max-height: 85vh !important;
+    margin: auto !important;
+  }
+
+  .modal-body {
+    padding: 14px !important;
+  }
+
+  /* ── Toast: reposition above bottom nav ── */
+  .toast-container {
+    bottom: 70px !important;
+    right: 14px !important;
+    left: 14px !important;
+    align-items: stretch !important;
+  }
+
+  .toast {
+    font-size: 12px !important;
+  }
+
+  /* ── Project Card Cover ── */
+  .project-card-cover-container {
+    height: 100px !important;
+  }
+
+  /* ── Detail Cards ── */
+  .detail-card {
+    padding: 14px !important;
+  }
+
+  .detail-card-title {
+    font-size: 10px !important;
+  }
+
+  /* ── Gamified Streaks Cards ── */
+  .gamified-card {
+    padding: 12px !important;
+  }
+
+  /* ── Empty State ── */
+  .empty-state {
+    padding: 40px 20px !important;
+  }
+
+  /* ── Search Results Dropdown ── */
+  #search-results-dropdown {
+    max-height: 260px !important;
+  }
+
+  /* ── Invoice Creator Table: horizontal scroll ── */
+  .invoice-creator-table {
+    display: block !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    white-space: nowrap !important;
   }
 }
 
