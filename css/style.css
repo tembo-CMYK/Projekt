@@ -57,6 +57,10 @@
 }
 
 /* Base Styles */
+html {
+  scroll-behavior: smooth;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -2651,19 +2655,39 @@ select option {
   }
 }
 
-/* Mobile View Adjustments (widths under 768px) */
+/* ==========================================================================
+   MOBILE OPTIMIZATION (≤768px)
+   ──────────────────────────────────────────────────────────────────────
+   Rules applied:
+     1. Touch targets ≥ 48dp, spacing ≥ 8dp (standard 8px grid)
+     2. Body text ≥ 16px, line-height 150%, overscroll containment
+     3. CTA buttons 48-56dp tall, font-weight 500
+     4. Nav: icons + short labels, fixed 5-tab layout, scale(0.96) press
+     5. Card elevation: lighter surface colors, thin border, border-radius 16px
+     6. Border radius consistency: buttons 12px, inputs 8px
+     7. Spacing rhythm: standardized gaps, paddings, and margins
+   ========================================================================== */
+
 @media (max-width: 768px) {
 
-  /* ── Layout Shell ── */
+  /* ╔══════════════════════════════════════════╗
+     ║  1. LAYOUT SHELL                         ║
+     ╚══════════════════════════════════════════╝ */
+
   .app-container {
     flex-direction: column !important;
     height: 100vh !important;
     min-height: 100vh !important;
-    min-height: 100dvh !important;          /* dynamic viewport on iOS */
+    min-height: 100dvh !important;
     overflow: hidden !important;
   }
 
-  /* ── Bottom Navigation Bar ── */
+  /* ╔══════════════════════════════════════════╗
+     ║  2. BOTTOM NAVIGATION BAR                ║
+     ║  Fixed 5-tab, icon + short label          ║
+     ║  Rule 4: pair icons with text labels      ║
+     ╚══════════════════════════════════════════╝ */
+
   .sidebar {
     position: fixed !important;
     bottom: 0 !important;
@@ -2671,21 +2695,20 @@ select option {
     right: 0 !important;
     top: auto !important;
     width: 100% !important;
-    height: 56px !important;
+    height: 64px !important;
     flex-direction: row !important;
     justify-content: space-around !important;
-    align-items: center !important;
+    align-items: stretch !important;
     padding: 0 !important;
     border-right: none !important;
     border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
-    background-color: rgba(18, 18, 22, 0.92) !important;
-    backdrop-filter: blur(20px) saturate(1.6) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(1.6) !important;
+    background-color: rgba(18, 18, 22, 0.94) !important;
+    backdrop-filter: blur(24px) saturate(1.6) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(1.6) !important;
     z-index: 1000 !important;
-    padding-bottom: env(safe-area-inset-bottom, 0px) !important;  /* iPhone notch */
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
   }
 
-  /* Hide non-navigation sidebar elements */
   .sidebar .logo-container,
   .sidebar .profile-card,
   .sidebar .nav-label,
@@ -2697,28 +2720,31 @@ select option {
     display: flex !important;
     flex-direction: row !important;
     justify-content: space-around !important;
-    align-items: center !important;
+    align-items: stretch !important;
     width: 100% !important;
     height: 100% !important;
     margin: 0 !important;
     gap: 0 !important;
   }
 
-  /* ── Nav Items: ICONS ONLY ── */
+  /* Nav items: icon + short text via ::after pseudo-element
+     Original long labels hidden with font-size: 0, replaced
+     with concise labels derived from data-view attribute       */
   .sidebar-nav .nav-item {
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 0 !important;
-    padding: 8px 0 !important;
-    font-size: 0 !important;                /* hide all text */
+    gap: 4px !important;                  /* 8px spacing rhythm */
+    padding: 6px 0 4px !important;
+    font-size: 0 !important;              /* hide original long text */
     border-radius: 0 !important;
     background: transparent !important;
     border: none !important;
     width: 20% !important;
-    min-height: 44px !important;            /* touch-target minimum */
-    color: var(--text-muted) !important;
+    min-height: 48px !important;           /* Rule 1: ≥48dp touch target */
+    color: rgba(255, 255, 255, 0.45) !important;
     position: relative !important;
+    transition: color 0.15s ease !important;
   }
 
   .sidebar-nav .nav-item svg {
@@ -2726,9 +2752,23 @@ select option {
     height: 22px !important;
     margin-right: 0 !important;
     flex-shrink: 0 !important;
+    stroke: rgba(255, 255, 255, 0.45) !important;
+    transition: stroke 0.15s ease !important;
   }
 
-  /* Active state: colored icon + top accent dot */
+  /* Short labels via ::after — concise, unambiguous (Rule 4) */
+  .sidebar-nav .nav-item::after {
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.1px !important;
+    text-transform: capitalize !important;
+    content: attr(data-view) !important;
+    color: inherit !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Active state: high-contrast accent + top indicator bar (Rule 4, 5) */
   .sidebar-nav .nav-item.active {
     color: var(--color-primary) !important;
     box-shadow: none !important;
@@ -2739,86 +2779,230 @@ select option {
     stroke: var(--color-primary) !important;
   }
 
-  /* Hide the desktop left-edge accent bar on mobile */
   .sidebar-nav .nav-item.active::before {
     left: 50% !important;
     top: 0 !important;
     bottom: auto !important;
-    width: 20px !important;
-    height: 2px !important;
+    width: 24px !important;
+    height: 2.5px !important;
     transform: translateX(-50%) !important;
-    border-radius: 0 0 2px 2px !important;
+    border-radius: 0 0 3px 3px !important;
   }
 
-  /* ── Main Content Offset ── */
+  /* Pressed state feedback (Rule 3: distinct pressed state, Rule 7: subtle scale 0.96) */
+  .sidebar-nav .nav-item:active {
+    opacity: 0.7 !important;
+    transform: scale(0.96) !important;
+  }
+
+  /* ╔══════════════════════════════════════════╗
+     ║  3. MAIN CONTENT OFFSET                  ║
+     ╚══════════════════════════════════════════╝ */
+
   .workspace-container {
-    margin-bottom: 56px !important;
-    height: calc(100vh - 56px) !important;
-    height: calc(100dvh - 56px) !important;
+    margin-bottom: 64px !important;
+    height: calc(100vh - 64px) !important;
+    height: calc(100dvh - 64px) !important;
   }
 
   .workspace-content {
-    padding: 14px !important;
-    padding-bottom: 24px !important;
+    padding: 16px !important;
+    padding-bottom: 32px !important; /* 8px spacing rhythm */
+    overscroll-behavior: contain !important; /* Rule 4: scroll performance */
   }
 
-  /* ── Header ── */
+  /* ╔══════════════════════════════════════════╗
+     ║  4. CARD ELEVATION & SHAPE CONSISTENCY   ║
+     ║  Rule 2: Lighten backgrounds, thin border║
+     ║  Rule 5: Gaps & border-radius 16px       ║
+     ╚══════════════════════════════════════════╝ */
+  .project-card,
+  .client-card,
+  .stat-card,
+  .detail-card,
+  .gamified-card,
+  .kanban-card,
+  .doc-item,
+  .link-item {
+    background-color: #1e1e24 !important; /* Lighter elevated surface */
+    box-shadow: none !important; /* Remove muddy shadows on mobile */
+    border: 1px solid rgba(255, 255, 255, 0.06) !important; /* Thin border */
+    border-radius: 16px !important; /* Consistent border radius */
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+  }
+
+  .project-card:active,
+  .client-card:active,
+  .stat-card:active,
+  .detail-card:active,
+  .gamified-card:active,
+  .kanban-card:active,
+  .doc-item:active,
+  .link-item:active {
+    transform: scale(0.97) !important; /* Subtle scale on active press */
+  }
+
+  /* ╔══════════════════════════════════════════╗
+     ║  5. TYPOGRAPHY — LEGIBILITY               ║
+     ║  Rule 2: body ≥16px, line-height 150%     ║
+     ║  Rule 3: Boost weights on dark background║
+     ╚══════════════════════════════════════════╝ */
+
+  /* Body copy & descriptions — minimum 16px, weight 400 */
+  .project-card-body-text,
+  .log-text,
+  .prompt-text,
+  .upgrade-desc,
+  .empty-state p,
+  .checklist-item,
+  .client-detail-item {
+    font-size: 16px !important;
+    line-height: 1.5 !important;           /* 150% — Rule 2 */
+    font-weight: 400 !important;           /* Rule 3: boost weight */
+  }
+
+  /* Card titles & interactive labels — clear hierarchy via weight */
+  .project-card-title,
+  .client-card-title,
+  .doc-title,
+  .link-title,
+  .prompt-title {
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+    font-weight: 500 !important;
+  }
+
+  /* Secondary meta text — kept smaller but still legible (≥12px) */
+  .stat-label,
+  .log-meta,
+  .doc-meta,
+  .workflow-step-desc,
+  .client-card-meta,
+  .project-card-meta-row,
+  .phase-status-label {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    font-weight: 400 !important;           /* Rule 3: boost weight */
+  }
+
+  /* Section headings — weight-based hierarchy (Rule 2: avoid massive text) */
+  .section-title h1 {
+    font-size: 22px !important;
+    font-weight: 400 !important;
+    line-height: 1.3 !important;
+  }
+
+  .detail-card-title {
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+  }
+
+  /* ╔══════════════════════════════════════════╗
+     ║  6. HEADER                                ║
+     ╚══════════════════════════════════════════╝ */
+
   .workspace-header {
     height: auto !important;
     flex-direction: column !important;
-    padding: 10px 14px !important;
-    gap: 10px !important;
+    padding: 16px !important;              /* 8px spacing rhythm */
+    gap: 16px !important;                  /* 8px spacing rhythm */
     align-items: stretch !important;
   }
 
   .header-search {
     max-width: 100% !important;
     width: 100% !important;
+    padding: 12px 16px !important;          /* 8px spacing rhythm */
   }
 
   .header-search input {
-    font-size: 14px !important;            /* prevent iOS zoom on focus */
+    font-size: 16px !important;             /* ≥16px prevents iOS zoom on focus */
+    line-height: 1.4 !important;
   }
 
   .header-actions {
     justify-content: space-between !important;
     width: 100% !important;
     flex-wrap: wrap !important;
-    gap: 8px !important;
+    gap: 8px !important;                    /* Rule 1: ≥8dp between elements */
   }
 
   #header-clock {
-    font-size: 12px !important;
+    font-size: 13px !important;
   }
 
   .header-actions > div[style*="width: 180px"] {
     width: 140px !important;
   }
 
-  /* ── Grids: Stack on mobile ── */
+  /* ╔══════════════════════════════════════════╗
+     ║  7. BUTTONS & CONTROLS                   ║
+     ║  Rule 3: CTAs 48-56dp, distinct states    ║
+     ║  Rule 6: border-radius 12px               ║
+     ╚══════════════════════════════════════════╝ */
+
+  /* Primary CTA buttons — 48dp minimum height */
+  .btn-primary,
+  .upgrade-cta-btn {
+    min-height: 48px !important;
+    padding: 12px 24px !important;          /* 8px spacing rhythm */
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    border-radius: 12px !important;        /* Rule 6: buttons 12px */
+  }
+
+  /* Secondary / utility buttons — 44dp minimum */
+  .btn-secondary,
+  .btn,
+  .header-btn,
+  .add-task-btn,
+  .copy-btn {
+    min-height: 44px !important;
+    padding: 12px 16px !important;          /* 8px spacing rhythm */
+    font-size: 14px !important;
+    border-radius: 12px !important;        /* Rule 6: buttons 12px */
+  }
+
+  /* Back bar — taller touch target */
+  .back-bar {
+    min-height: 44px !important;
+    padding: 8px 0 !important;
+    font-size: 14px !important;
+  }
+
+  .back-bar svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  /* ╔══════════════════════════════════════════╗
+     ║  8. GRIDS — STACK ON MOBILE              ║
+     ║  Rule 5: card grids gap 16px             ║
+     ╚══════════════════════════════════════════╝ */
+
   .projects-grid {
     grid-template-columns: 1fr !important;
-    gap: 14px !important;
+    gap: 16px !important;                  /* Rule 5: gap 16px */
   }
 
   .client-list-grid {
     grid-template-columns: 1fr !important;
-    gap: 12px !important;
+    gap: 16px !important;                  /* Rule 5: gap 16px */
   }
 
   .assets-library-grid {
     grid-template-columns: 1fr !important;
-    gap: 14px !important;
+    gap: 16px !important;                  /* Rule 5: gap 16px */
   }
 
   .dashboard-stats {
     grid-template-columns: 1fr 1fr !important;
-    gap: 10px !important;
+    gap: 16px !important;                  /* Rule 5: gap 16px */
   }
 
   .dashboard-main-layout {
     grid-template-columns: 1fr !important;
-    gap: 20px !important;
+    gap: 24px !important;                  /* 8px spacing rhythm */
   }
 
   .top-brief-grid {
@@ -2833,31 +3017,37 @@ select option {
 
   .client-detail-layout {
     grid-template-columns: 1fr !important;
-    gap: 14px !important;
+    gap: 16px !important;                  /* 8px spacing rhythm */
   }
 
   .new-invoice-body-grid {
     grid-template-columns: 1fr !important;
   }
 
-  /* ── Section Header ── */
+  /* ╔══════════════════════════════════════════╗
+     ║  9. SECTION HEADER                       ║
+     ╚══════════════════════════════════════════╝ */
+
   .section-header {
     flex-direction: column !important;
     align-items: flex-start !important;
-    gap: 12px !important;
+    gap: 16px !important;                  /* 8px spacing rhythm */
   }
 
-  .section-title h1 {
-    font-size: 20px !important;
-  }
+  /* ╔══════════════════════════════════════════╗
+     ║  10. TABS & FILTERS                      ║
+     ║  Rule 4: scrollable when ≥5, visible edge ║
+     ╚══════════════════════════════════════════╝ */
 
-  /* ── Tab Filters: scrollable row ── */
   .tab-filters {
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
     flex-wrap: nowrap !important;
-    gap: 2px !important;
+    gap: 8px !important;                   /* 8px spacing rhythm */
     scrollbar-width: none !important;
+    /* Visible edge cue — fade mask on right side */
+    -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%) !important;
+    mask-image: linear-gradient(to right, black 85%, transparent 100%) !important;
   }
 
   .tab-filters::-webkit-scrollbar {
@@ -2867,8 +3057,9 @@ select option {
   .filter-tab {
     white-space: nowrap !important;
     flex-shrink: 0 !important;
-    padding: 6px 10px !important;
-    font-size: 11px !important;
+    padding: 12px 16px !important;          /* taller touch target / 8px rhythm */
+    font-size: 14px !important;
+    min-height: 44px !important;
   }
 
   .category-filters {
@@ -2876,8 +3067,10 @@ select option {
     -webkit-overflow-scrolling: touch !important;
     flex-wrap: nowrap !important;
     scrollbar-width: none !important;
-    gap: 6px !important;
+    gap: 8px !important;                    /* Rule 1: ≥8dp spacing */
     padding-bottom: 4px !important;
+    -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%) !important;
+    mask-image: linear-gradient(to right, black 85%, transparent 100%) !important;
   }
 
   .category-filters::-webkit-scrollbar {
@@ -2887,90 +3080,279 @@ select option {
   .category-tab {
     white-space: nowrap !important;
     flex-shrink: 0 !important;
+    padding: 12px 16px !important;          /* 8px spacing rhythm */
+    font-size: 14px !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
   }
 
-  /* ── Stat Cards ── */
+  /* ╔══════════════════════════════════════════╗
+     ║  11. STAT CARDS                          ║
+     ╚══════════════════════════════════════════╝ */
+
   .stat-card {
-    padding: 12px !important;
+    padding: 16px !important;              /* 8px spacing rhythm */
   }
 
   .stat-value {
-    font-size: 18px !important;
+    font-size: 20px !important;
   }
 
   .stat-card-badge {
-    width: 28px !important;
-    height: 28px !important;
-    top: 10px !important;
-    right: 10px !important;
-    font-size: 16px !important;
+    width: 32px !important;
+    height: 32px !important;
+    top: 16px !important;                  /* 8px spacing rhythm */
+    right: 16px !important;                 /* 8px spacing rhythm */
+    font-size: 18px !important;
   }
 
-  /* ── Kanban Board ── */
+  /* ╔══════════════════════════════════════════╗
+     ║  12. KANBAN BOARD                        ║
+     ╚══════════════════════════════════════════╝ */
+
   .kanban-board-grid {
     grid-template-columns: 1fr !important;
-    gap: 14px !important;
+    gap: 16px !important;                  /* 8px spacing rhythm */
   }
 
-  /* ── Modals: full-width on mobile ── */
+  .kanban-card {
+    min-height: 48px !important;            /* Rule 1: touch target */
+    padding: 16px !important;              /* 8px spacing rhythm */
+    font-size: 14px !important;
+  }
+
+  /* ╔══════════════════════════════════════════╗
+     ║  13. MODALS — FULL WIDTH ON MOBILE       ║
+     ║  Rule 8: overscroll containment          ║
+     ║  Rule 6: border-radius 16px              ║
+     ║  Rule 2: elevated lighter background     ║
+     ╚══════════════════════════════════════════╝ */
+
   .modal-container {
     width: 95% !important;
     max-width: none !important;
     max-height: 85vh !important;
     margin: auto !important;
+    overscroll-behavior: contain !important; /* Rule 8: prevent background scroll */
+    border-radius: 16px !important;        /* Rule 6: consistent border radius */
+    background-color: #1e1e24 !important;  /* Rule 2: lighter background */
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
   }
 
   .modal-body {
-    padding: 14px !important;
+    padding: 16px !important;
   }
 
-  /* ── Toast: reposition above bottom nav ── */
+  .modal-title {
+    font-size: 16px !important;
+  }
+
+  .modal-close {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* ╔══════════════════════════════════════════╗
+     ║  14. FORMS — INPUT SIZING                ║
+     ║  Rule 6: border-radius 8px for inputs    ║
+     ╚══════════════════════════════════════════╝ */
+
+  .form-input,
+  .invoice-creator-input,
+  .add-task-input {
+    font-size: 16px !important;             /* prevents iOS zoom */
+    padding: 12px 16px !important;          /* 8px spacing rhythm */
+    min-height: 48px !important;            /* Rule 1: touch target */
+    line-height: 1.4 !important;
+    border-radius: 8px !important;          /* Rule 6: input radius */
+  }
+
+  .form-label {
+    font-size: 11px !important;
+    margin-bottom: 4px !important;
+  }
+
+  select {
+    font-size: 16px !important;
+    min-height: 48px !important;
+    padding: 12px 36px 12px 16px !important; /* 8px spacing rhythm */
+    border-radius: 8px !important;          /* Rule 6: input radius */
+  }
+
+  /* Custom dropdown triggers */
+  .custom-dropdown-trigger {
+    min-height: 48px !important;
+    padding: 12px 16px !important;
+    font-size: 14px !important;
+    border-radius: 8px !important;          /* Rule 6: input radius */
+  }
+
+  .custom-dropdown-option {
+    min-height: 44px !important;
+    padding: 12px 16px !important;
+    font-size: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* ╔══════════════════════════════════════════╗
+     ║  15. TOAST — ABOVE BOTTOM NAV            ║
+     ╚══════════════════════════════════════════╝ */
+
   .toast-container {
-    bottom: 70px !important;
-    right: 14px !important;
-    left: 14px !important;
+    bottom: 78px !important;                /* above 64px nav + gap */
+    right: 16px !important;
+    left: 16px !important;
     align-items: stretch !important;
   }
 
   .toast {
-    font-size: 12px !important;
+    font-size: 14px !important;
+    padding: 16px !important;              /* 8px spacing rhythm */
+    min-height: 48px !important;
+    border-radius: 12px !important;
   }
 
-  /* ── Project Card Cover ── */
+  /* ╔══════════════════════════════════════════╗
+     ║  16. CARDS & DETAIL VIEWS                ║
+     ╚══════════════════════════════════════════╝ */
+
   .project-card-cover-container {
-    height: 100px !important;
+    height: 110px !important;
   }
 
-  /* ── Detail Cards ── */
   .detail-card {
-    padding: 14px !important;
+    padding: 16px !important;
   }
 
-  .detail-card-title {
-    font-size: 10px !important;
-  }
-
-  /* ── Gamified Streaks Cards ── */
   .gamified-card {
-    padding: 12px !important;
+    padding: 16px !important;              /* 8px spacing rhythm */
   }
 
-  /* ── Empty State ── */
   .empty-state {
-    padding: 40px 20px !important;
+    padding: 48px 24px !important;
   }
 
-  /* ── Search Results Dropdown ── */
+  .empty-state h3 {
+    font-size: 18px !important;
+  }
+
+  .empty-state p {
+    font-size: 16px !important;            /* minimum body size 16px */
+  }
+
+  /* ╔══════════════════════════════════════════╗
+     ║  17. INTERACTIVE LISTS & DOC ITEMS       ║
+     ║  Rule 1: every row ≥ 48dp touch target   ║
+     ╚══════════════════════════════════════════╝ */
+
+  .doc-item {
+    min-height: 56px !important;
+    padding: 16px !important;              /* 8px spacing rhythm */
+  }
+
+  .doc-title {
+    font-size: 15px !important;
+  }
+
+  .doc-status {
+    font-size: 11px !important;
+    padding: 4px 10px !important;
+  }
+
+  .log-item {
+    padding: 12px 0 !important;             /* 8px spacing rhythm */
+  }
+
+  .link-item {
+    min-height: 48px !important;
+    padding: 12px 16px !important;          /* 8px spacing rhythm */
+    font-size: 14px !important;
+  }
+
+  /* ╔══════════════════════════════════════════╗
+     ║  18. SEARCH RESULTS DROPDOWN             ║
+     ╚══════════════════════════════════════════╝ */
+
   #search-results-dropdown {
-    max-height: 260px !important;
+    max-height: 280px !important;
   }
 
-  /* ── Invoice Creator Table: horizontal scroll ── */
+  .search-result-item {
+    min-height: 48px !important;
+    padding: 12px 16px !important;          /* 8px spacing rhythm */
+  }
+
+  /* ╔══════════════════════════════════════════╗
+     ║  19. INVOICE TABLE — HORIZONTAL SCROLL   ║
+     ╚══════════════════════════════════════════╝ */
+
   .invoice-creator-table {
     display: block !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
     white-space: nowrap !important;
+  }
+
+  /* ╔══════════════════════════════════════════╗
+     ║  20. CHECKLIST ITEMS — TOUCH TARGETS     ║
+     ╚══════════════════════════════════════════╝ */
+
+  .checklist-item {
+    min-height: 48px !important;
+    padding: 8px 0 !important;
+    gap: 16px !important;                  /* 8px spacing rhythm */
+  }
+
+  .checklist-checkbox {
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 4px !important;
+  }
+
+  /* ╔══════════════════════════════════════════╗
+     ║  21. CLIENT CARDS                        ║
+     ╚══════════════════════════════════════════╝ */
+
+  .client-avatar {
+    width: 48px !important;
+    height: 48px !important;
+    font-size: 17px !important;
+  }
+
+  .client-card {
+    padding: 16px !important;              /* 8px spacing rhythm */
+    gap: 16px !important;                  /* 8px spacing rhythm */
+  }
+
+  .client-badge-item {
+    font-size: 12px !important;
+    padding: 4px 12px !important;
+    min-height: 28px !important;
+  }
+
+  /* ╔══════════════════════════════════════════╗
+     ║  22. PHASE TIMELINE                      ║
+     ╚══════════════════════════════════════════╝ */
+
+  .phase-header {
+    min-height: 48px !important;
+    padding: 8px 0 !important;
+  }
+
+  .phase-name {
+    font-size: 16px !important;
+  }
+
+  .phase-status-trigger {
+    min-height: 40px !important;            /* Taller control */
+    padding: 8px 12px !important;           /* 8px spacing rhythm */
+    font-size: 14px !important;
+    border-radius: 8px !important;          /* Consistent input radius */
   }
 }
 
@@ -3267,5 +3649,20 @@ select option {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
   border-color: rgba(255,255,255,0.2) !important;
   transition: none !important;
+}
+
+/* ==========================================================================
+   ACCESSIBILITY - REDUCED MOTION OVERRIDES
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
