@@ -1,0 +1,13 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs and local configurations
+.vscode/
+.idea/
+.project
+.settings/
+
+# Logs
+*.log
